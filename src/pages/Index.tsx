@@ -1,16 +1,42 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { usePortfolioData } from "@/hooks/usePortfolioData";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import Navbar from "@/components/Navbar";
+import HeroSection from "@/components/HeroSection";
+import ProfileSection from "@/components/ProfileSection";
+import ServicesSection from "@/components/ServicesSection";
+import PortfolioSection from "@/components/PortfolioSection";
+import ContactSection from "@/components/ContactSection";
+import AdminPanel from "@/components/AdminPanel";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const Index = () => {
+  const { data, updateData } = usePortfolioData();
+  const [adminOpen, setAdminOpen] = useState(false);
+  useScrollAnimation();
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background text-foreground">
+      <Navbar onAdminClick={() => setAdminOpen(true)} />
+      <HeroSection data={data} />
+      <ProfileSection data={data} />
+      <ServicesSection data={data} />
+      <PortfolioSection data={data} />
+      <ContactSection data={data} />
+
+      {/* Footer */}
+      <footer className="border-t border-border py-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+          <p className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} <span className="text-primary font-syne font-semibold">{data.profile.name}</span> — {data.profile.role}
+          </p>
+        </div>
+      </footer>
+
+      {adminOpen && (
+        <AdminPanel data={data} onUpdate={updateData} onClose={() => setAdminOpen(false)} />
+      )}
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
